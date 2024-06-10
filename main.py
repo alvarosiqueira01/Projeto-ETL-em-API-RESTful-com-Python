@@ -3,6 +3,7 @@ import time
 import json
 
 
+#Funções que criam cada arquivo csv, para os gols, e para as assistencias
 def create_goals_table(data):
     data_table = "NAME,NATIONALITY,TEAM,APPEARENCES,GOALS\n"
 
@@ -31,13 +32,13 @@ conn = http.client.HTTPSConnection("api-football-v1.p.rapidapi.com")
 
 
 headers = {
-    'x-rapidapi-key': "56df8881a7msh727e042787c9a19p1d659fjsnff012d9fc00d",
+    'x-rapidapi-key': "*********TOKEN DA API*************",
     'x-rapidapi-host': "api-football-v1.p.rapidapi.com"
 }
 
 
 menu1 = '''
-______________________
+   __________________________________________
     Digite o número da liga a ser consultada:
     1 - UEFA Champions League
     2 - Premier League (ING)
@@ -54,8 +55,8 @@ ______________________
 '''
 
 menu2 = '''
-______________________
-    Digite o número de início da temporada (de 2010 em diante):
+   __________________________________________________________
+    Digite o ano de início da temporada (de 2010 em diante):
 
 '''
 
@@ -123,12 +124,15 @@ while True:
                 valid_option2 = False
 
             if valid_option2 == True:
+                #Chamada de API para obter os artilheiros daquela edição da competição
                 conn.request("GET", f"/v3/players/topscorers?league={id}&season={season}", headers=headers)
 
                 scorers_res = conn.getresponse()
                 scorers_data = scorers_res.read()
 
+                #Decodifica o binário para string
                 scorers_data_json = scorers_data.decode("utf-8")
+                #Converte a string em formato json que é como de fato estão organizadas as informações
                 goals_data = json.loads(scorers_data_json)
                 create_goals_table(goals_data)
 
@@ -143,7 +147,7 @@ while True:
                 assists_data = json.loads(assists_data_json)
                 create_assists_table(assists_data)
 
-                print("Tabelas criadas com sucesso!") 
+                print("\n\nTabelas criadas com sucesso!") 
 
             break
 
@@ -152,4 +156,5 @@ while True:
     
 
         
+
 
